@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Port - Refugio Ancestral / Ancestral Haven</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para iconos de WhatsApp y banderas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Configuración para la tipografía Playfair Display y Inter -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap');
+        
+        /* Paleta de colores Premium Oscura */
+        :root {
+            --color-dark-navy: #101C2B; /* Fondo principal oscuro */
+            --color-section-bg: #182536; /* Fondo de secciones */
+            --color-gold: #D4AF37; /* Oro suave para acentos principales */
+            --color-emerald: #006A4E; /* Verde Esmeralda para precios */
+            --color-text-light: #E0E0E0; /* Texto claro */
+        }
+
+        .bg-dark-navy { background-color: var(--color-dark-navy); }
+        .bg-section { background-color: var(--color-section-bg); }
+        .text-gold { color: var(--color-gold); }
+        .text-emerald { color: var(--color-emerald); }
+
+        .font-serif-elegant { font-family: 'Playfair Display', serif; }
+        .font-sans-clean { font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--color-dark-navy); 
+            margin: 0;
+            padding: 0;
+            color: var(--color-text-light); 
+            scroll-behavior: smooth;
+        }
+
+        /* Estilos del Encabezado */
+        .fixed-header {
+            position: fixed; /* Aseguramos que solo el header superior sea fijo */
+            top: 0;
+            background-color: rgba(16, 28, 43, 0.95); 
+            backdrop-filter: blur(5px);
+            z-index: 40;
+        }
+        
+        /* Eliminamos el 'sticky' de la barra de pestañas para que se mueva con el scroll */
+        #menu-tabs-wrapper {
+            padding-top: 16px; 
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.5);
+        }
+
+        .tab-button {
+            border-color: var(--color-gold);
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: var(--color-gold);
+            color: var(--color-dark-navy);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+        .tab-button:hover:not(.active) {
+            background-color: rgba(212, 175, 55, 0.2);
+        }
+
+        .product-name {
+            cursor: pointer;
+            transition: color 0.2s;
+            text-underline-offset: 4px;
+        }
+        .product-name:hover {
+            color: var(--color-emerald);
+            text-decoration: underline;
+        }
+        
+        /* Efecto de transición para el contenido del menú */
+        .tab-content {
+            transition: opacity 0.4s ease-in-out;
+            opacity: 0; /* Por defecto, todos ocultos con opacidad 0 */
+        }
+        
+        /* Clase para ocultar completamente - LA TRANSICIÓN DE OPACIDAD DEBE OCURRIR ANTES DE AGREGAR ESTA CLASE */
+        .tab-content.is-hidden {
+            display: none; 
+        }
+
+        /* Clase para mostrar con animación */
+        .tab-content.is-active {
+            opacity: 1;
+            display: grid; /* Usamos grid para que funcione el layout de 2 columnas */
+        }
+        
+        /* --- SPLASH SCREEN (INTRO MÁGICA Y ELEGANTE) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-dark-navy);
+            z-index: 100; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out; 
+        }
+        
+        #splash-content {
+            opacity: 0;
+            transform: translateY(10px) scale(0.98); 
+            letter-spacing: 5px; 
+            transition: opacity 1.8s ease-in, transform 1.8s ease-in, letter-spacing 1.8s ease-in; 
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.3); 
+        }
+        
+        .splash-active #splash-content {
+            opacity: 1;
+            transform: translateY(0) scale(1); 
+            letter-spacing: 0px; 
+        }
+
+        /* Estilo para los títulos de sección del menú */
+        .menu-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.25rem; /* 36px */
+            font-weight: 600;
+            color: var(--color-gold);
+            text-align: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.5);
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="font-sans-clean min-h-screen">
+    
+    <!-- SPLASH SCREEN (INTRO MAGICA) -->
+    <div id="splash-screen" class="splash-active">
+        <div id="splash-content" class="text-center p-8 max-w-lg">
+            <h1 class="font-serif-elegant text-6xl sm:text-8xl font-bold text-gold tracking-widest leading-none" data-translate="app_name">
+                Le Port
+            </h1>
+            <h2 class="text-xl sm:text-3xl mt-4 text-white font-light italic tracking-wider" data-translate="app_slogan">
+                Un Refugio de Aromas y Amores
+            </h2>
+        </div>
+    </div>
+    
+    <!-- HEADER FIJO (Navegación) -->
+    <header class="fixed-header w-full shadow-lg border-b border-gray-700/50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+            <!-- Nombre "Le Port" -->
+            <div class="font-serif-elegant text-2xl font-bold text-gold" data-translate="app_name">Le Port</div>
+            
+            <!-- Selector de Idioma -->
+            <div class="flex items-center space-x-4">
+                <button id="lang-toggle" class="px-3 py-1 rounded-full bg-gold text-dark-navy font-semibold text-sm transition duration-200 hover:bg-[#FFD700]" aria-label="Cambiar idioma">
+                    <span id="current-lang-flag">EN</span> 
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. SECCIÓN HERO -->
+    <div id="hero" class="relative w-full min-h-screen flex flex-col justify-center items-center bg-cover bg-center pt-[70px]" 
+         style="background-image: url('https://placehold.co/1200x800/101C2B/D4AF37?text=Tu+Foto+de+Cafe+Premium');">
+        
+        <div class="absolute inset-0 bg-dark-navy opacity-70"></div>
+        
+        <div class="relative text-center p-8 max-w-4xl pt-16 pb-16">
+            <h1 class="font-serif-elegant text-5xl sm:text-7xl font-bold text-white tracking-wider leading-tight" data-translate="hero_title">
+                Vive La Tradición
+            </h1>
+            <h2 class="text-xl sm:text-3xl mt-4 text-gold font-semibold uppercase tracking-widest" data-translate="hero_subtitle">
+                Un Refugio de Aromas y Amores
+            </h2>
+            <p class="text-gray-300 mt-6 text-lg max-w-lg mx-auto" data-translate="hero_text">
+                Nuestros chefs preparan platos con ingredientes frescos y de temporada, garantizando que cada comida sea una mezcla perfecta de tradición y sabor.
+            </p>
+            <!-- Enlace nav-link con scroll suave -->
+            <a href="#menu-tabs-wrapper" class="inline-block mt-8 px-8 py-3 bg-gold text-dark-navy font-bold rounded-full shadow-lg hover:bg-[#FFD700] transition duration-300 uppercase text-sm nav-link" data-translate="hero_button">
+                EXPLORA EL MENÚ
+            </a>
+        </div>
+    </div>
+
+    <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+    <a href="https://wa.me/573001234567?text=Hola%2C%20quisiera%20hacer%20un%20pedido%20o%20reservar%20en%20Le%20Port." target="_blank" id="whatsapp-button" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] text-white rounded-full flex justify-center items-center text-3xl shadow-xl transition transform hover:scale-110 z-50">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- MODAL DE IMAGEN DEL PRODUCTO (Inicialmente Oculto) -->
+    <div id="image-modal" class="fixed inset-0 hidden items-center justify-center bg-dark-navy bg-opacity-90 z-50" onclick="closeModal()">
+        <div id="modal-content-container" class="bg-section rounded-xl shadow-2xl p-4 sm:p-6 relative w-11/12 max-w-xl" onclick="event.stopPropagation()">
+            <!-- Botón de Cierre -->
+            <button class="absolute top-2 right-2 text-3xl text-gold hover:text-white transition" onclick="closeModal()">
+                &times;
+            </button>
+            <h4 id="modal-title" class="font-serif-elegant text-2xl text-center text-gold mb-4 mt-2"></h4>
+            <img id="modal-image" src="" alt="Imagen del Producto" class="w-full h-auto rounded-lg max-h-[70vh] object-contain">
+            <p id="modal-description" class="text-center text-gray-300 mt-3 italic"></p>
+        </div>
+    </div>
+
+
+    <!-- 2. CONTENIDO PRINCIPAL DEL MENÚ -->
+    <div id="main-content" class="w-full max-w-6xl mx-auto p-4 sm:p-8 pt-16 pb-16">
+        
+        <!-- Bloque de LEYENDA y VISUALES -->
+        <div class="mb-16 p-6 sm:p-10 bg-section rounded-xl shadow-2xl border border-gold/10">
+            <h2 class="text-center font-serif-elegant text-4xl text-gold mb-10 uppercase tracking-wider" id="leyenda" data-translate="legend_main_title">Nuestra Leyenda y Visión</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <!-- Columna de Texto -->
+                <div>
+                    <h3 class="font-serif-elegant text-3xl font-semibold text-gold mb-4" data-translate="legend_subtitle">El Origen Místico de Le Port ✨</h3>
+                    <p class="text-gray-300 text-lg leading-relaxed mb-4" data-translate="legend_p1">
+                        Le Port es la materialización de una antigua leyenda del Caribe: la unión mística entre la **sabiduría de la Sierra Nevada** 🏔️ y el **amor profundo** que se profesa en la Costa. Cada rincón y cada sabor son una ofrenda a este encuentro, un puente entre lo ancestral y lo contemporáneo.
+                    </p>
+                    <p class="text-gray-300 text-lg leading-relaxed" data-translate="legend_p2">
+                        Aquí, el **Néctar del Mamo** (nuestro café) no es solo una bebida; es un secreto ancestral. Nuestra repostería es la promesa de un reencuentro. Te invitamos a hacer una pausa, a encontrar tu refugio y a vivir la magia del Caribe en un solo sorbo. Solo usamos ingredientes que honran la tierra.
+                    </p>
+                </div>
+
+                <!-- Columna de Imágenes -->
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://placehold.co/400x300/31435f/D4AF37?text=Cafe+y+Grano" class="rounded-lg shadow-xl object-cover w-full h-auto" alt="[Coffee and Bean Image]">
+                    <img src="https://placehold.co/400x300/31435f/D4AF37?text=Tarta+de+Lujo" class="rounded-lg shadow-xl object-cover w-full h-auto" alt="[Luxury Cake Image]">
+                    <img src="https://placehold.co/400x300/31435f/D4AF37?text=Interior+del+Refugio" class="rounded-lg shadow-xl object-cover w-full h-auto col-span-2" alt="[Refuge Interior Image]">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bloque RITUALES DE LE PORT (CARRUSEL) -->
+        <div class="text-center mb-16 p-6 sm:p-10 bg-dark-navy rounded-xl shadow-xl border border-emerald/50">
+            <h2 class="font-serif-elegant text-3xl text-gold mb-8 uppercase tracking-wider" data-translate="rituals_main_title">Rituales de Le Port: Tu Conveniencia</h2>
+            
+            <!-- CONTENEDOR DEL CARRUSEL: En móvil es horizontal, en desktop es grid -->
+            <div id="rituales-carousel" class="w-full flex overflow-x-scroll scroll-snap-type:x mandatory md:grid md:grid-cols-3 gap-4">
+                <!-- Ritual 1: Mañanas -->
+                <div class="flex-shrink-0 w-[85%] sm:w-full p-4 border border-gold/30 rounded-lg bg-section shadow-lg scroll-snap-align-center">
+                    <div class="text-4xl text-emerald mb-3">☕</div>
+                    <h4 class="font-serif-elegant text-xl font-semibold text-gold mb-2" data-translate="ritual_morning_title">Amanecer (Brunch)</h4>
+                    <p class="text-gray-400" data-translate="ritual_morning_time">Despierta con nuestra energía ancestral. <br>De **8:00 AM a 11:30 AM**.</p>
+                </div>
+                <!-- Ritual 2: Tarde -->
+                <div class="flex-shrink-0 w-[85%] sm:w-full p-4 border border-gold/30 rounded-lg bg-section shadow-lg scroll-snap-align-center ml-4 md:ml-0">
+                    <div class="text-4xl text-emerald mb-3">🍽️</div>
+                    <h4 class="font-serif-elegant text-xl font-semibold text-gold mb-2" data-translate="ritual_noon_title">El Almuerzo (Fuertes)</h4>
+                    <p class="text-gray-400" data-translate="ritual_noon_time">Platos de autor, frescos y nutritivos. <br>De **12:00 PM a 3:00 PM**.</p>
+                </div>
+                <!-- Ritual 3: Noche -->
+                <div class="flex-shrink-0 w-[85%] sm:w-full p-4 border border-gold/30 rounded-lg bg-section shadow-lg scroll-snap-align-center ml-4 md:ml-0">
+                    <div class="text-4xl text-emerald mb-3">🍰</div>
+                    <h4 class="font-serif-elegant text-xl font-semibold text-gold mb-2" data-translate="ritual_evening_title">Reencuentro (Postres & Café)</h4>
+                    <p class="text-gray-400" data-translate="ritual_evening_time">El momento para el amor y el buen café. <br>De **3:00 PM a 8:00 PM**.</p>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-4 md:hidden">
+                <i class="fas fa-arrows-alt-h mr-1"></i> <span data-translate="slide_tip">Desliza para ver todos los rituales.</span>
+            </p>
+        </div>
+        
+        <!-- NAVEGACIÓN DEL MENÚ (Título y Tabs) -->
+        <div class="text-center mb-4" id="menu-tabs-container">
+            <h2 class="font-serif-elegant text-4xl text-gold mb-8 uppercase tracking-wider" data-translate="menu_main_title">Menú Completo</h2>
+        </div>
+
+        <!-- Wrapper sin 'sticky' para que la barra de tabs se mueva con el scroll -->
+        <div id="menu-tabs-wrapper" class="bg-dark-navy"> 
+            <!-- Tabs de Navegación -->
+            <div class="flex flex-wrap justify-center gap-2 sm:gap-4 text-sm sm:text-base" id="menu-tabs">
+                <button data-tab="brunch" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_brunch">
+                    BRUNCH
+                </button>
+                <button data-tab="fuertes" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_mains">
+                    PLATOS FUERTES
+                </button>
+                <button data-tab="internacional" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_international">
+                    COCINA VIAJERA
+                </button>
+                <button data-tab="bebidas" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_drinks">
+                    BEBIDAS
+                </button>
+                <button data-tab="panrep" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_desserts">
+                    PANADERÍA & POSTRES
+                </button>
+                <button data-tab="combos" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_combos">
+                    COMBOS & OFERTAS
+                </button>
+            </div>
+        </div>
+
+
+        <!-- CONTENIDO DEL MENÚ EN BLOQUE (Scrollable eliminado, ahora usa el scroll de la página) -->
+        <div id="menu-content" class="bg-section p-6 sm:p-10 rounded-xl shadow-2xl border border-gold/10 mt-8">
+            
+            <!-- Contenedores con la estructura de Grid, con más espacio vertical -->
+            <!-- IMPORTANTE: Todos inician con la clase 'is-hidden' para asegurar que el display: none esté activo al inicio. -->
+            <div id="content-brunch" class="tab-content grid gap-6 is-hidden"></div>
+            <div id="content-fuertes" class="tab-content grid gap-6 is-hidden"></div>
+            <div id="content-internacional" class="tab-content grid gap-6 is-hidden"></div>
+            <div id="content-bebidas" class="tab-content grid gap-6 is-hidden"></div>
+            <div id="content-panrep" class="tab-content grid gap-6 is-hidden"></div>
+            <div id="content-combos" class="tab-content grid gap-6 is-hidden"></div>
+
+        </div>
+
+        <!-- Footer / Contacto -->
+        <footer class="text-center mt-16 text-sm text-gray-400">
+            <p data-translate="footer_text">Síguenos en <span class="text-gold font-bold">@LePortCafeSM</span> | Barrio La Esperanza, Santa Marta</p>
+        </footer>
+    </div>
+
+    <!-- Lógica JavaScript para Traducciones, Pestañas, Modal y Splash Screen -->
+    <script>
+        const translations = {
+            'es': {
+                app_name: "Le Port",
+                app_slogan: "Un Refugio de Aromas y Amores",
+                // HEADER Y NAVEGACIÓN
+                tab_brunch: "BRUNCH",
+                tab_mains: "PLATOS FUERTES",
+                tab_international: "COCINA VIAJERA",
+                tab_drinks: "BEBIDAS",
+                tab_desserts: "PANADERÍA & POSTRES",
+                tab_combos: "COMBOS & OFERTAS",
+                // HERO
+                hero_title: "Vive La Tradición",
+                hero_subtitle: "Un Refugio de Aromas y Amores",
+                hero_text: "Nuestros chefs preparan platos con ingredientes frescos y de temporada, garantizando que cada comida sea una mezcla perfecta de tradición y sabor.",
+                hero_button: "EXPLORA EL MENÚ",
+                // LEYENDA
+                legend_main_title: "Nuestra Leyenda y Visión",
+                legend_subtitle: "El Origen Místico de Le Port ✨",
+                legend_p1: "Le Port es la materialización de una antigua leyenda del Caribe: la unión mística entre la **sabiduría de la Sierra Nevada** 🏔️ y el **amor profundo** que se profesa en la Costa. Cada rincón y cada sabor son una ofrenda a este encuentro, un puente entre lo ancestral y lo contemporáneo.",
+                legend_p2: "Aquí, el **Néctar del Mamo** (nuestro café) no es solo una bebida; es un secreto ancestral. Nuestra repostería es la promesa de un reencuentro. Te invitamos a hacer una pausa, a encontrar tu refugio y a vivir la magia del Caribe en un solo sorbo. Solo usamos ingredientes que honran la tierra.",
+                // RITUALES
+                rituals_main_title: "Rituales de Le Port: Tu Conveniencia",
+                ritual_morning_title: "Amanecer (Brunch)",
+                ritual_morning_time: "Despierta con nuestra energía ancestral. <br>De **8:00 AM a 11:30 AM**.",
+                ritual_noon_title: "El Almuerzo (Fuertes)",
+                ritual_noon_time: "Platos de autor, frescos y nutritivos. <br>De **12:00 PM a 3:00 PM**.",
+                ritual_evening_title: "Reencuentro (Postres & Café)",
+                ritual_evening_time: "El momento para el amor y el buen café. <br>De **3:00 PM a 8:00 PM**.",
+                slide_tip: "Desliza para ver todos los rituales.",
+                // MENÚ
+                menu_main_title: "Menú Completo",
+                brunch_section_title: "El Despertar del Tayrona",
+                mains_section_title: "Platos de Autor",
+                international_section_title: "La Influencia del Poniente (Cocina Viajera)",
+                drinks_section_title: "El Alma del Café y los Licores",
+                desserts_section_title: "La Ofrenda y el Romance",
+                combos_section_title: "Rituales de Fidelidad",
+                subsection_hot: "☕ El Ritual Caliente: Cafés de Autor",
+                subsection_cold: "🧊 La Ofrenda Fría: Bebidas Refrescantes",
+                combo_available: "Disponible Martes y Miércoles.",
+                combo_validity: "Válido antes de las 11 AM.",
+                // FOOTER
+                footer_text: "Síguenos en <span class='text-gold font-bold'>@LePortCafeSM</span> | Barrio La Esperanza, Santa Marta",
+                // PRODUCTOS
+                products: {
+                    // BRUNCH
+                    brunch_1: { name: "Huevos Rancheros del Tayrona", desc: "Huevos orgánicos sobre tostada artesanal con suero costeño y aguacate.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Huevos+Rancheros", price: "$18.900" },
+                    brunch_2: { name: "Tostadas Ancestrales", desc: "Tostada de pan de masa madre con queso crema, miel de abejas y frutos secos.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Tostadas+con+Miel", price: "$15.500" },
+                    // PLATOS FUERTES
+                    mains_1: { name: "Pescado Caribeño al Vapor", desc: "Pescado blanco fresco cocido en leche de coco y verduras, servido con arroz.", image: "https://placehold.co/600x400/006A4E/FFFFFF?text=Pescado+Al+Vapor", price: "$24.500" },
+                    mains_2: { name: "Bowl del Refugio", desc: "Base de quinoa, pollo o lentejas, vegetales frescos y aderezo de maracuyá.", image: "https://placehold.co/600x400/6B8E23/FFFFFF?text=Bowl+de+Quinoa", price: "$21.900" },
+                    // INTERNACIONAL
+                    inter_1: { name: "Sándwich de Provenza", desc: "Pan brioche tostado con jamón serrano, queso de cabra y reducción de balsámico. **Inspiración Francesa**.", image: "https://placehold.co/600x400/800080/FFFFFF?text=Sandwich+Gourmet", price: "$22.000" },
+                    inter_2: { name: "Ensalada Nómada", desc: "Mix de hojas exóticas, nueces caramelizadas, queso azul y vinagreta de mango. **Fusión Europea**.", image: "https://placehold.co/600x400/3CB371/FFFFFF?text=Ensalada+Premium", price: "$19.500" },
+                    inter_3: { name: "Pancakes del Nuevo Mundo", desc: "Panqueques gruesos al estilo americano con jarabe de arce real y frutos del bosque. **Toque Norteamericano**.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Pancakes+con+Sirope", price: "$17.500" },
+                    // BEBIDAS CALIENTES
+                    hot_1: { name: "El Néctar del Mamo", desc: "Filtrado ceremonial de **Café Natural** de Origen Sierra Nevada. Puro y ancestral.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Nectar+del+Mamo", price: "$10.900" },
+                    hot_2: { name: "Beso del Tayrona (Canela)", desc: "Latte cremoso con el calor de la **Canela** y un toque dulce de panela.", image: "https://placehold.co/600x400/D2B48C/8B4513?text=Latte+Canela", price: "$8.900" },
+                    hot_3: { name: "Amor de Vainilla", desc: "Cappuccino con esencia de **Vainilla** de Tahití y espuma de leche de coco.", image: "https://placehold.co/600x400/F5DEB3/D4AF37?text=Cappuccino+Vainilla", price: "$9.900" },
+                    hot_4: { name: "El Refugio de Paz (CBD)", desc: "Café a elección infusionado con aceite de **CBD**, una experiencia de calma.", image: "https://placehold.co/600x400/006A4E/FFFFFF?text=Cafe+con+CBD", price: "$16.500" },
+                    // BEBIDAS FRÍAS
+                    cold_1: { name: "Esencia Fría (Cold Brew)", desc: "Café extraído en frío por 18 horas, concentrado, suave y de baja acidez. Servido con hielo.", image: "https://placehold.co/600x400/4682B4/FFFFFF?text=Cold+Brew", price: "$11.900" },
+                    cold_2: { name: "Agua del Origen", desc: "Limonada de coco, o refresco de corozo/tamarindo. Fruta de temporada.", image: "https://placehold.co/600x400/90EE90/101C2B?text=Limonada+Tropical", price: "$6.900" },
+                    cold_3: { name: "Batido de la Sierra", desc: "Batido cremoso de frutas tropicales y yogurt natural.", image: "https://placehold.co/600x400/FFD700/101C2B?text=Batido+de+Frutas", price: "$10.500" },
+                    // POSTRES
+                    dessert_1: { name: "Tarta 'Amores de Arhuaco'", desc: "Tarta cremosa con base de maíz/yuca y maracuyá.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Tarta+Maracuya", price: "$12.900" },
+                    dessert_2: { name: "Panela Roll", desc: "Cinnamon roll con jarabe de panela artesanal.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Panela+Roll", price: "$7.500" },
+                    dessert_3: { name: "Pan de Yuca Rústico", desc: "Receta tradicional, ideal para acompañar el tinto.", image: "https://placehold.co/600x400/FFFAF0/101C2B?text=Pan+de+Yuca", price: "$3.500" },
+                    // COMBOS
+                    combo_1: { name: "Combo El Refugio (Parejas)", desc: "2 Beso del Tayrona (Cappuccino) + 1 Tarta 'Amores de Arhuaco'.", image: "https://placehold.co/600x400/182536/D4AF37?text=Combo+Pareja", price: "$25.900" },
+                    combo_2: { name: "Amanecer de La Esperanza", desc: "1 Plato de Brunch a elección + 1 Tinto Clásico.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Combo+Brunch", price: "$19.900" },
+                }
+            },
+            'en': {
+                app_name: "Le Port",
+                app_slogan: "An Ancestral Haven of Aromas and Loves",
+                // HEADER AND NAVIGATION
+                tab_brunch: "BRUNCH",
+                tab_mains: "MAIN DISHES",
+                tab_international: "TRAVELER'S CUISINE",
+                tab_drinks: "BEVERAGES",
+                tab_desserts: "BAKERY & DESSERTS",
+                tab_combos: "COMBOS & OFFERS",
+                // HERO
+                hero_title: "Live The Tradition",
+                hero_subtitle: "An Ancestral Haven of Aromas and Loves",
+                hero_text: "Our chefs prepare dishes with fresh, seasonal ingredients, ensuring every meal is a perfect blend of tradition and flavor.",
+                hero_button: "EXPLORE THE MENU",
+                // LEYENDA
+                legend_main_title: "Our Legend and Vision",
+                legend_subtitle: "The Mystic Origin of Le Port ✨",
+                legend_p1: "Le Port is the materialization of an ancient Caribbean legend: the mystic union between the **wisdom of the Sierra Nevada** 🏔️ and the **deep love** professed on the Coast. Every corner and every flavor is an offering to this encounter, a bridge between the ancestral and the contemporary.",
+                legend_p2: "Here, the **Mamo's Nectar** (our coffee) is not just a drink; it is an ancestral secret. Our pastry is the promise of a reunion. We invite you to pause, find your refuge, and experience the magic of the Caribbean in a single sip. We only use ingredients that honor the earth.",
+                // RITUALES
+                rituals_main_title: "Le Port Rituals: Your Convenience",
+                ritual_morning_title: "Sunrise (Brunch)",
+                ritual_morning_time: "Awaken with our ancestral energy. <br>From **8:00 AM to 11:30 AM**.",
+                ritual_noon_title: "The Lunch (Mains)",
+                ritual_noon_time: "Signature dishes, fresh and nutritious. <br>From **12:00 PM to 3:00 PM**.",
+                ritual_evening_title: "Reunion (Desserts & Coffee)",
+                ritual_evening_time: "The moment for love and good coffee. <br>From **3:00 PM to 8:00 PM**.",
+                slide_tip: "Swipe to see all rituals.",
+                // MENÚ
+                menu_main_title: "Full Menu",
+                brunch_section_title: "The Tayrona Awakening",
+                mains_section_title: "Signature Dishes",
+                international_section_title: "The Western Influence (Traveler's Cuisine)",
+                drinks_section_title: "The Soul of Coffee and Liquors",
+                desserts_section_title: "The Offering and The Romance",
+                combos_section_title: "Loyalty Rituals",
+                subsection_hot: "☕ The Hot Ritual: Signature Coffees",
+                subsection_cold: "🧊 The Cold Offering: Refreshing Beverages",
+                combo_available: "Available Tuesday and Wednesday.",
+                combo_validity: "Valid before 11 AM.",
+                // FOOTER
+                footer_text: "Follow us on <span class='text-gold font-bold'>@LePortCafeSM</span> | La Esperanza neighborhood, Santa Marta",
+                // PRODUCTOS
+                products: {
+                    // BRUNCH
+                    brunch_1: { name: "Tayrona Ranch Eggs", desc: "Organic eggs on artisan toast with coastal sour cream and avocado.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Ranch+Eggs", price: "$18.900" },
+                    brunch_2: { name: "Ancestral Toast", desc: "Sourdough bread toast with cream cheese, honey and nuts.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Toast+with+Honey", price: "$15.500" },
+                    // MAIN DISHES
+                    mains_1: { name: "Caribbean Steamed Fish", desc: "Fresh white fish cooked in coconut milk and vegetables, served with rice.", image: "https://placehold.co/600x400/006A4E/FFFFFF?text=Steamed+Fish", price: "$24.500" },
+                    mains_2: { name: "The Refuge Bowl", desc: "Quinoa base, chicken or lentils, fresh vegetables, and passion fruit dressing.", image: "https://placehold.co/600x400/6B8E23/FFFFFF?text=Quinoa+Bowl", price: "$21.900" },
+                    // INTERNACIONAL
+                    inter_1: { name: "Provence Sandwich", desc: "Toasted brioche bread with serrano ham, goat cheese, and balsamic reduction. **French Inspiration**.", image: "https://placehold.co/600x400/800080/FFFFFF?text=Gourmet+Sandwich", price: "$22.000" },
+                    inter_2: { name: "Nomad Salad", desc: "Mix of exotic leaves, caramelized nuts, blue cheese, and mango vinaigrette. **European Fusion**.", image: "https://placehold.co/600x400/3CB371/FFFFFF?text=Premium+Salad", price: "$19.500" },
+                    inter_3: { name: "New World Pancakes", desc: "Thick American-style pancakes with real maple syrup and forest berries. **North American Touch**.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Pancakes+con+Syrup", price: "$17.500" },
+                    // HOT DRINKS
+                    hot_1: { name: "The Mamo's Nectar", desc: "Ceremonial filter of **Natural Coffee** from Sierra Nevada Origin. Pure and ancestral.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Mamo's+Nectar", price: "$10.900" },
+                    hot_2: { name: "Tayrona's Kiss (Cinnamon)", desc: "Creamy Latte with the warmth of **Cinnamon** and a sweet touch of panela.", image: "https://placehold.co/600x400/D2B48C/8B4513?text=Cinnamon+Latte", price: "$8.900" },
+                    hot_3: { name: "Vanilla Love", desc: "Cappuccino with **Tahitian Vanilla** essence and coconut milk foam.", image: "https://placehold.co/600x400/F5DEB3/D4AF37?text=Vanilla+Cappuccino", price: "$9.900" },
+                    // CBD coffee is a special request, only appears in the Spanish
+                    hot_4: { name: "The Peace Refuge (CBD)", desc: "Coffee of choice infused with **CBD** oil, an experience of calm.", image: "https://placehold.co/600x400/006A4E/FFFFFF?text=CBD+Coffee", price: "$16.500" },
+                    // COLD DRINKS
+                    cold_1: { name: "Cold Essence (Cold Brew)", desc: "Coffee cold-extracted for 18 hours, concentrated, smooth, and low acidity. Served over ice.", image: "https://placehold.co/600x400/4682B4/FFFFFF?text=Cold+Brew", price: "$11.900" },
+                    cold_2: { name: "Water of Origin", desc: "Coconut lemonade, or corozo/tamarind refreshment. Seasonal fruit.", image: "https://placehold.co/600x400/90EE90/101C2B?text=Tropical+Lemonade", price: "$6.900" },
+                    cold_3: { name: "Sierra Smoothie", desc: "Creamy smoothie of tropical fruits and natural yogurt.", image: "https://placehold.co/600x400/FFD700/101C2B?text=Fruit+Smoothie", price: "$10.500" },
+                    // DESSERTS
+                    dessert_1: { name: "Arhuaco Loves' Tart", desc: "Creamy tart with a corn/yucca base and passion fruit.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Passion+Fruit+Tart", price: "$12.900" },
+                    dessert_2: { name: "Panela Roll", desc: "Cinnamon roll with artisan panela syrup.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Panela+Roll", price: "$7.500" },
+                    dessert_3: { name: "Rustic Yucca Bread", desc: "Traditional Yucca Bread recipe, ideal to accompany black coffee.", image: "https://placehold.co/600x400/FFFAF0/101C2B?text=Yucca+Bread", price: "$3.500" },
+                    // COMBOS
+                    combo_1: { name: "The Refuge Combo (Couples)", desc: "2 Tayrona's Kiss (Cappuccino) + 1 'Arhuaco Loves' Tart.", image: "https://placehold.co/600x400/182536/D4AF37?text=Couple+Combo", price: "$25.900" },
+                    combo_2: { name: "Sunrise of Hope", desc: "1 Brunch Dish of choice + 1 Classic Black Coffee.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Brunch+Combo", price: "$19.900" },
+                }
+            }
+        };
+
+        let currentLang = 'es'; 
+
+        // Función para renderizar un item del menú
+        function renderMenuItem(item) {
+            // Usamos un layout de grid con 2 columnas: 1 para el texto, 1 para el precio
+            return `
+                <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 items-center p-4 border-b border-gray-700/50 hover:bg-dark-navy transition duration-200 rounded-lg">
+                    <div class="col-span-3 sm:col-span-4">
+                        <h3 class="font-serif-elegant text-xl font-semibold text-gold product-name" 
+                            data-name="${item.name}"
+                            data-image="${item.image}"
+                            data-desc="${item.desc.replace(/\*\*(.*?)\*\*/g, '')}">
+                            ${item.name}
+                        </h3>
+                        <p class="text-gray-400 text-sm menu-item-description">${item.desc.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>
+                    </div>
+                    <p class="col-span-1 text-right text-xl font-bold text-emerald">${item.price}</p>
+                </div>
+            `;
+        }
+
+        // Función principal para actualizar el contenido del menú (CRÍTICO: Inyectar todo el HTML de una vez)
+        function updateMenuContent() {
+            const menuData = translations[currentLang].products;
+            
+            // Título de Subsección del Menú
+            const getSectionTitle = (key) => `<h3 class="menu-section-title">${translations[currentLang][key]}</h3>`;
+
+            // 1. Brunch
+            let brunchHtml = getSectionTitle('brunch_section_title');
+            brunchHtml += renderMenuItem(menuData.brunch_1);
+            brunchHtml += renderMenuItem(menuData.brunch_2);
+            document.getElementById('content-brunch').innerHTML = brunchHtml;
+
+            // 2. Platos Fuertes
+            let mainsHtml = getSectionTitle('mains_section_title');
+            mainsHtml += renderMenuItem(menuData.mains_1);
+            mainsHtml += renderMenuItem(menuData.mains_2);
+            document.getElementById('content-fuertes').innerHTML = mainsHtml;
+            
+            // 3. Cocina Viajera
+            let interHtml = getSectionTitle('international_section_title');
+            interHtml += renderMenuItem(menuData.inter_1);
+            interHtml += renderMenuItem(menuData.inter_2);
+            interHtml += renderMenuItem(menuData.inter_3);
+            document.getElementById('content-internacional').innerHTML = interHtml;
+
+            // 4. Bebidas
+            let drinksHtml = getSectionTitle('drinks_section_title');
+            drinksHtml += `<p class="text-emerald font-semibold text-xl mt-4 mb-3 text-center">${translations[currentLang].subsection_hot}</p>`;
+            drinksHtml += renderMenuItem(menuData.hot_1);
+            drinksHtml += renderMenuItem(menuData.hot_2);
+            drinksHtml += renderMenuItem(menuData.hot_3);
+            drinksHtml += renderMenuItem(menuData.hot_4);
+            drinksHtml += `<p class="text-emerald font-semibold text-xl mt-6 mb-3 text-center">${translations[currentLang].subsection_cold}</p>`;
+            drinksHtml += renderMenuItem(menuData.cold_1);
+            drinksHtml += renderMenuItem(menuData.cold_2);
+            drinksHtml += renderMenuItem(menuData.cold_3);
+            document.getElementById('content-bebidas').innerHTML = drinksHtml;
+
+            // 5. Panadería y Postres
+            let dessertsHtml = getSectionTitle('desserts_section_title');
+            dessertsHtml += renderMenuItem(menuData.dessert_1);
+            dessertsHtml += renderMenuItem(menuData.dessert_2);
+            dessertsHtml += renderMenuItem(menuData.dessert_3);
+            document.getElementById('content-panrep').innerHTML = dessertsHtml;
+            
+            // 6. Combos
+            let combosHtml = getSectionTitle('combos_section_title');
+            
+            // Renderizado especial para combos (más destacados)
+            combosHtml += `
+                <div class="bg-dark-navy rounded-xl p-4 shadow-xl border-l-4 border-gold/70 hover:border-emerald transition duration-300 mb-4">
+                    <h3 class="font-serif-elegant text-2xl font-bold text-gold product-name" data-name="${menuData.combo_1.name}" data-image="${menuData.combo_1.image}" data-desc="${menuData.combo_1.desc}">
+                        ${menuData.combo_1.name} <i class="fas fa-heart text-red-500 ml-2"></i>
+                    </h3>
+                    <p class="text-gray-400 mt-1">${menuData.combo_1.desc}</p>
+                    <p class="text-3xl font-bold text-emerald mt-2">${menuData.combo_1.price}</p>
+                    <p class="text-sm text-gray-500 mt-1 italic">${translations[currentLang].combo_available}</p>
+                </div>
+            `;
+            
+            combosHtml += `
+                <div class="bg-dark-navy rounded-xl p-4 shadow-xl border-l-4 border-gold/70 hover:border-emerald transition duration-300">
+                    <h3 class="font-serif-elegant text-2xl font-bold text-gold product-name" data-name="${menuData.combo_2.name}" data-image="${menuData.combo_2.image}" data-desc="${menuData.combo_2.desc}">
+                        ${menuData.combo_2.name} <i class="fas fa-sun text-yellow-500 ml-2"></i>
+                    </h3>
+                    <p class="text-gray-400 mt-1">${menuData.combo_2.desc}</p>
+                    <p class="text-3xl font-bold text-emerald mt-2">${menuData.combo_2.price}</p>
+                    <p class="text-sm text-gray-500 mt-1 italic">${translations[currentLang].combo_validity}</p>
+                </div>
+            `;
+            document.getElementById('content-combos').innerHTML = combosHtml;
+        }
+
+        // Función para traducir elementos estáticos (con data-translate)
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[currentLang][key]) {
+                    element.innerHTML = translations[currentLang][key];
+                }
+            });
+            updateMenuContent(); // Asegura que el contenido dinámico también se actualice
+        }
+
+        // --- Lógica del Modal ---
+        const modal = document.getElementById('image-modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDescription = document.getElementById('modal-description');
+        
+        function openModal(name, imageUrl, description) {
+            modalTitle.textContent = name;
+            modalImage.src = imageUrl;
+            // La descripción en el modal no debe tener formato Markdown, así que eliminamos negritas
+            modalDescription.textContent = description.replace(/\*\*(.*?)\*\*/g, '$1'); 
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Evitar scroll del fondo
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            modalImage.src = "";
+            document.body.style.overflow = 'auto'; // Restaurar scroll del fondo
+        }
+        
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeModal();
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabsContainer = document.getElementById('menu-tabs');
+            const contents = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-button');
+            const langToggle = document.getElementById('lang-toggle');
+            const currentLangFlag = document.getElementById('current-lang-flag');
+            const body = document.body;
+            const splashScreen = document.getElementById('splash-screen');
+
+
+            // 1. Lógica del Splash Screen (Intro Mágica)
+            setTimeout(() => {
+                // Opacidad a 0 para fade-out
+                splashScreen.style.opacity = '0'; 
+                // Después del fade-out, ocultar completamente y permitir scroll
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                    body.style.overflow = 'auto'; // Restaurar scroll
+                }, 500); // Duración de la transición CSS
+            }, 3000); // 3 segundos antes de empezar a desaparecer
+            
+            // 2. Lógica de Pestañas (FIX: Corregido el flujo de display: none y opacity)
+            const activateTab = (tabName) => {
+                // Desactivar todos los contenidos
+                contents.forEach(content => {
+                    // 1. Iniciar la transición de opacidad a 0
+                    content.classList.remove('is-active'); 
+                    
+                    // 2. Después de la transición (400ms en CSS), ocultar completamente con display: none
+                    setTimeout(() => {
+                        content.classList.add('is-hidden');
+                    }, 400); 
+                });
+                buttons.forEach(button => button.classList.remove('active'));
+
+                // Activar el contenido seleccionado
+                const activeContent = document.getElementById(`content-${tabName}`);
+                if (activeContent) {
+                    // 1. Mostrar el contenedor (quitar display: none)
+                    activeContent.classList.remove('is-hidden'); 
+                    
+                    // 2. Forzar un reflow para que el navegador reconozca el cambio de display
+                    void activeContent.offsetWidth; 
+                    
+                    // 3. Iniciar el fade-in (opacidad a 1)
+                    activeContent.classList.add('is-active'); 
+                }
+
+                const activeButton = document.querySelector(`button[data-tab="${tabName}"]`);
+                if (activeButton) activeButton.classList.add('active');
+            };
+            
+            tabsContainer.addEventListener('click', (event) => {
+                const button = event.target.closest('.tab-button');
+                if (button) {
+                    const tabName = button.getAttribute('data-tab');
+                    // Solo si la pestaña no está ya activa
+                    if (!button.classList.contains('active')) {
+                        activateTab(tabName);
+                    }
+                }
+            });
+            
+            // 3. Lógica del Selector de Idioma
+            langToggle.addEventListener('click', () => {
+                currentLang = currentLang === 'es' ? 'en' : 'es';
+                
+                // Actualizar la bandera en el botón para que muestre el idioma OPUESTO (al que puede cambiar)
+                langToggle.querySelector('#current-lang-flag').textContent = currentLang === 'es' ? 'EN' : 'ES'; 
+
+                applyTranslations();
+                // Reactivar la pestaña actual para que las traducciones sean visibles inmediatamente
+                // Necesitamos el 'setTimeout' para que el contenido se inyecte antes de activar la animación de nuevo.
+                const currentActiveTab = document.querySelector('.tab-button.active')?.getAttribute('data-tab') || 'brunch';
+                setTimeout(() => activateTab(currentActiveTab), 50); 
+            });
+
+            // 4. Event listener para los NOMBRES de los productos (Abrir Modal)
+            document.getElementById('menu-content').addEventListener('click', function(event) {
+                const nameElement = event.target.closest('.product-name');
+                if (nameElement) {
+                    const name = nameElement.getAttribute('data-name');
+                    const imageUrl = nameElement.getAttribute('data-image');
+                    const description = nameElement.getAttribute('data-desc');
+                    
+                    if (imageUrl) {
+                        openModal(name, imageUrl, description);
+                    } else {
+                        console.error('No se encontró URL de imagen para este producto.');
+                    }
+                }
+            });
+
+            // Inicialización:
+            applyTranslations(); 
+            // Inicializamos la pestaña 'brunch' para que aparezca por defecto
+            // Esperamos un poco para asegurarnos de que el DOM esté listo y las traducciones aplicadas
+            setTimeout(() => {
+                activateTab('brunch'); 
+                currentLangFlag.textContent = currentLang === 'es' ? 'EN' : 'ES'; // Muestra el idioma al que se puede cambiar
+            }, 100);
+        });
+    </script>
+</body>
+</html>
