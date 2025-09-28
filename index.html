@@ -46,11 +46,12 @@
             z-index: 40;
         }
         
-        /* Eliminamos el 'sticky' de la barra de pestañas para que se mueva con el scroll */
+        /* Estilo para la barra de pestañas (separada del header fijo) */
         #menu-tabs-wrapper {
             padding-top: 16px; 
             padding-bottom: 16px;
             border-bottom: 2px solid rgba(212, 175, 55, 0.5);
+            /* Importante: para que se mueva con el scroll, no es 'fixed' ni 'sticky' */
         }
 
         .tab-button {
@@ -81,6 +82,13 @@
         .tab-content {
             transition: opacity 0.4s ease-in-out;
             opacity: 0; /* Por defecto, todos ocultos con opacidad 0 */
+            grid-template-columns: 1fr; /* Columna única por defecto */
+        }
+
+        @media (min-width: 768px) {
+             .tab-content {
+                grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 columnas en desktop */
+            }
         }
         
         /* Clase para ocultar completamente - LA TRANSICIÓN DE OPACIDAD DEBE OCURRIR ANTES DE AGREGAR ESTA CLASE */
@@ -91,7 +99,7 @@
         /* Clase para mostrar con animación */
         .tab-content.is-active {
             opacity: 1;
-            display: grid; /* Usamos grid para que funcione el layout de 2 columnas */
+            display: grid; 
         }
         
         /* --- SPLASH SCREEN (INTRO MÁGICA Y ELEGANTE) --- */
@@ -123,17 +131,49 @@
             letter-spacing: 0px; 
         }
 
-        /* Estilo para los títulos de sección del menú */
+        /* Estilos para los títulos de sección del menú */
         .menu-section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2.25rem; /* 36px */
+            /* REDUCCIÓN DEL TAMAÑO: text-2xl (móvil) y md:text-3xl (desktop) */
+            font-size: 1.5rem; /* text-2xl (24px) */
+            line-height: 1.2;
             font-weight: 600;
             color: var(--color-gold);
             text-align: center;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid rgba(212, 175, 55, 0.5);
-            margin-bottom: 1.5rem;
-            margin-top: 1rem;
+            /* REDUCCIÓN DEL MARGEN/PADDING */
+            padding-bottom: 0.25rem; /* 4px */
+            border-bottom: 1px solid rgba(212, 175, 55, 0.4); /* Línea más delgada */
+            margin-bottom: 1.25rem; /* 20px */
+            margin-top: 0.5rem; /* 8px */
+        }
+
+        @media (min-width: 768px) {
+            .menu-section-title {
+                font-size: 1.875rem; /* md:text-3xl (30px) */
+            }
+        }
+
+        /* Estilos específicos para el carrusel de Rituales en móvil */
+        #rituales-carousel {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+        #rituales-carousel::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        .scroll-snap-align-center {
+            scroll-snap-align: center;
+        }
+        
+        /* Estilos para la barra de navegación de pestañas (scrollable) */
+        #menu-tabs {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+        #menu-tabs::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
         }
     </style>
 </head>
@@ -168,7 +208,7 @@
 
     <!-- 1. SECCIÓN HERO -->
     <div id="hero" class="relative w-full min-h-screen flex flex-col justify-center items-center bg-cover bg-center pt-[70px]" 
-         style="background-image: url('https://placehold.co/1200x800/101C2B/D4AF37?text=Tu+Foto+de+Cafe+Premium');">
+        style="background-image: url('https://placehold.co/1200x800/101C2B/D4AF37?text=Tu+Foto+de+Cafe+Premium');">
         
         <div class="absolute inset-0 bg-dark-navy opacity-70"></div>
         
@@ -268,32 +308,37 @@
         
         <!-- NAVEGACIÓN DEL MENÚ (Título y Tabs) -->
         <div class="text-center mb-4" id="menu-tabs-container">
+            <!-- Título principal del menú: se mantiene grande para la jerarquía -->
             <h2 class="font-serif-elegant text-4xl text-gold mb-8 uppercase tracking-wider" data-translate="menu_main_title">Menú Completo</h2>
         </div>
 
         <!-- Wrapper sin 'sticky' para que la barra de tabs se mueva con el scroll -->
         <div id="menu-tabs-wrapper" class="bg-dark-navy"> 
             <!-- Tabs de Navegación -->
-            <div class="flex flex-wrap justify-center gap-2 sm:gap-4 text-sm sm:text-base" id="menu-tabs">
-                <button data-tab="brunch" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_brunch">
+            <div class="flex overflow-x-auto whitespace-nowrap snap-x scroll-smooth justify-start md:justify-center gap-2 text-sm sm:text-base px-2" id="menu-tabs">
+                <!-- Botones con padding y tamaño de fuente más pequeños para ser más compactos -->
+                <button data-tab="brunch" class="flex-shrink-0 snap-center tab-button px-3 py-1.5 text-xs sm:text-sm rounded-full font-semibold transition duration-300 border-2 border-gold/50" data-translate="tab_brunch">
                     BRUNCH
                 </button>
-                <button data-tab="fuertes" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_mains">
+                <button data-tab="fuertes" class="flex-shrink-0 snap-center tab-button px-3 py-1.5 text-xs sm:text-sm rounded-full font-semibold transition duration-300 border-2 border-gold/50" data-translate="tab_mains">
                     PLATOS FUERTES
                 </button>
-                <button data-tab="internacional" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_international">
+                <button data-tab="internacional" class="flex-shrink-0 snap-center tab-button px-3 py-1.5 text-xs sm:text-sm rounded-full font-semibold transition duration-300 border-2 border-gold/50" data-translate="tab_international">
                     COCINA VIAJERA
                 </button>
-                <button data-tab="bebidas" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_drinks">
+                <button data-tab="bebidas" class="flex-shrink-0 snap-center tab-button px-3 py-1.5 text-xs sm:text-sm rounded-full font-semibold transition duration-300 border-2 border-gold/50" data-translate="tab_drinks">
                     BEBIDAS
                 </button>
-                <button data-tab="panrep" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_desserts">
+                <button data-tab="panrep" class="flex-shrink-0 snap-center tab-button px-3 py-1.5 text-xs sm:text-sm rounded-full font-semibold transition duration-300 border-2 border-gold/50" data-translate="tab_desserts">
                     PANADERÍA & POSTRES
                 </button>
-                <button data-tab="combos" class="tab-button px-4 py-2 rounded-full font-semibold transition duration-300 whitespace-nowrap border-2 border-gold/50" data-translate="tab_combos">
+                <button data-tab="combos" class="flex-shrink-0 snap-center tab-button px-3 py-1.5 text-xs sm:text-sm rounded-full font-semibold transition duration-300 border-2 border-gold/50" data-translate="tab_combos">
                     COMBOS & OFERTAS
                 </button>
             </div>
+            <p class="text-xs text-gray-500 mt-2 text-center md:hidden">
+                <i class="fas fa-arrows-alt-h mr-1"></i> <span data-translate="slide_tip_menu">Desliza para navegar las secciones.</span>
+            </p>
         </div>
 
 
@@ -319,6 +364,37 @@
 
     <!-- Lógica JavaScript para Traducciones, Pestañas, Modal y Splash Screen -->
     <script>
+        // --- 1. DATOS DE TRADUCCIÓN Y MENÚ ---
+        const menuDataStructure = {
+            brunch: {
+                titleKey: "brunch_section_title",
+                items: ["brunch_1", "brunch_2"]
+            },
+            fuertes: {
+                titleKey: "mains_section_title",
+                items: ["mains_1", "mains_2"]
+            },
+            internacional: {
+                titleKey: "international_section_title",
+                items: ["inter_1", "inter_2", "inter_3"]
+            },
+            bebidas: {
+                titleKey: "drinks_section_title",
+                subsections: [
+                    { titleKey: "subsection_hot", items: ["hot_1", "hot_2", "hot_3", "hot_4"] },
+                    { titleKey: "subsection_cold", items: ["cold_1", "cold_2", "cold_3"] }
+                ]
+            },
+            panrep: {
+                titleKey: "desserts_section_title",
+                items: ["dessert_1", "dessert_2", "dessert_3"]
+            },
+            combos: {
+                titleKey: "combos_section_title",
+                items: ["combo_1", "combo_2"]
+            }
+        };
+
         const translations = {
             'es': {
                 app_name: "Le Port",
@@ -349,7 +425,8 @@
                 ritual_evening_title: "Reencuentro (Postres & Café)",
                 ritual_evening_time: "El momento para el amor y el buen café. <br>De **3:00 PM a 8:00 PM**.",
                 slide_tip: "Desliza para ver todos los rituales.",
-                // MENÚ
+                slide_tip_menu: "Desliza para navegar las secciones.", // Nuevo texto de ayuda
+                // MENÚ SECCIONES
                 menu_main_title: "Menú Completo",
                 brunch_section_title: "El Despertar del Tayrona",
                 mains_section_title: "Platos de Autor",
@@ -422,7 +499,8 @@
                 ritual_evening_title: "Reunion (Desserts & Coffee)",
                 ritual_evening_time: "The moment for love and good coffee. <br>From **3:00 PM to 8:00 PM**.",
                 slide_tip: "Swipe to see all rituals.",
-                // MENÚ
+                slide_tip_menu: "Swipe to navigate sections.", // Nuevo texto de ayuda
+                // MENÚ SECCIONES
                 menu_main_title: "Full Menu",
                 brunch_section_title: "The Tayrona Awakening",
                 mains_section_title: "Signature Dishes",
@@ -452,259 +530,271 @@
                     hot_1: { name: "The Mamo's Nectar", desc: "Ceremonial filter of **Natural Coffee** from Sierra Nevada Origin. Pure and ancestral.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Mamo's+Nectar", price: "$10.900" },
                     hot_2: { name: "Tayrona's Kiss (Cinnamon)", desc: "Creamy Latte with the warmth of **Cinnamon** and a sweet touch of panela.", image: "https://placehold.co/600x400/D2B48C/8B4513?text=Cinnamon+Latte", price: "$8.900" },
                     hot_3: { name: "Vanilla Love", desc: "Cappuccino with **Tahitian Vanilla** essence and coconut milk foam.", image: "https://placehold.co/600x400/F5DEB3/D4AF37?text=Vanilla+Cappuccino", price: "$9.900" },
-                    // CBD coffee is a special request, only appears in the Spanish
                     hot_4: { name: "The Peace Refuge (CBD)", desc: "Coffee of choice infused with **CBD** oil, an experience of calm.", image: "https://placehold.co/600x400/006A4E/FFFFFF?text=CBD+Coffee", price: "$16.500" },
                     // COLD DRINKS
-                    cold_1: { name: "Cold Essence (Cold Brew)", desc: "Coffee cold-extracted for 18 hours, concentrated, smooth, and low acidity. Served over ice.", image: "https://placehold.co/600x400/4682B4/FFFFFF?text=Cold+Brew", price: "$11.900" },
+                    cold_1: { name: "Cold Essence (Cold Brew)", desc: "Coffee extracted cold for 18 hours, concentrated, smooth, and low in acidity. Served with ice.", image: "https://placehold.co/600x400/4682B4/FFFFFF?text=Cold+Brew", price: "$11.900" },
                     cold_2: { name: "Water of Origin", desc: "Coconut lemonade, or corozo/tamarind refreshment. Seasonal fruit.", image: "https://placehold.co/600x400/90EE90/101C2B?text=Tropical+Lemonade", price: "$6.900" },
-                    cold_3: { name: "Sierra Smoothie", desc: "Creamy smoothie of tropical fruits and natural yogurt.", image: "https://placehold.co/600x400/FFD700/101C2B?text=Fruit+Smoothie", price: "$10.500" },
-                    // DESSERTS
+                    cold_3: { name: "Sierra Smoothie", desc: "Creamy smoothie with tropical fruits and natural yogurt.", image: "https://placehold.co/600x400/FFD700/101C2B?text=Fruit+Smoothie", price: "$10.500" },
+                    // POSTRES
                     dessert_1: { name: "Arhuaco Loves' Tart", desc: "Creamy tart with a corn/yucca base and passion fruit.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Passion+Fruit+Tart", price: "$12.900" },
                     dessert_2: { name: "Panela Roll", desc: "Cinnamon roll with artisan panela syrup.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Panela+Roll", price: "$7.500" },
-                    dessert_3: { name: "Rustic Yucca Bread", desc: "Traditional Yucca Bread recipe, ideal to accompany black coffee.", image: "https://placehold.co/600x400/FFFAF0/101C2B?text=Yucca+Bread", price: "$3.500" },
+                    dessert_3: { name: "Rustic Yucca Bread", desc: "Traditional recipe, ideal to accompany the classic black coffee.", image: "https://placehold.co/600x400/FFFAF0/101C2B?text=Yucca+Bread", price: "$3.500" },
                     // COMBOS
-                    combo_1: { name: "The Refuge Combo (Couples)", desc: "2 Tayrona's Kiss (Cappuccino) + 1 'Arhuaco Loves' Tart.", image: "https://placehold.co/600x400/182536/D4AF37?text=Couple+Combo", price: "$25.900" },
-                    combo_2: { name: "Sunrise of Hope", desc: "1 Brunch Dish of choice + 1 Classic Black Coffee.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Brunch+Combo", price: "$19.900" },
+                    combo_1: { name: "The Refuge Combo (Couples)", desc: "2 Tayrona's Kiss (Cappuccino) + 1 'Arhuaco Loves' Tart.", image: "https://placehold.co/600x400/182536/D4AF37?text=Couples+Combo", price: "$25.900" },
+                    combo_2: { name: "La Esperanza Sunrise", desc: "1 Brunch Dish of choice + 1 Classic Black Coffee.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Brunch+Combo", price: "$19.900" },
                 }
             }
         };
 
-        let currentLang = 'es'; 
+        let currentLang = 'es';
+        const langToggleBtn = document.getElementById('lang-toggle');
+        const currentLangFlag = document.getElementById('current-lang-flag');
+        const modal = document.getElementById('image-modal');
+        let activeTab = 'brunch'; // Tab inicial
 
-        // Función para renderizar un item del menú
-        function renderMenuItem(item) {
-            // Usamos un layout de grid con 2 columnas: 1 para el texto, 1 para el precio
+        // --- 2. FUNCIONES PRINCIPALES ---
+
+        /**
+         * Genera el HTML de un solo producto.
+         * @param {object} product - Objeto del producto con name, desc, price, image.
+         * @param {string} key - Clave del producto para la traducción.
+         * @param {boolean} isCombo - Indica si es un combo para aplicar estilos especiales.
+         */
+        function createProductHTML(product, key, isCombo) {
+            const extraTags = isCombo ? `<p class="text-emerald text-xs mt-2 font-bold" data-translate="combo_available">${translations[currentLang]['combo_available']}</p><p class="text-xs text-gray-500" data-translate="combo_validity">${translations[currentLang]['combo_validity']}</p>` : '';
+            
             return `
-                <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 items-center p-4 border-b border-gray-700/50 hover:bg-dark-navy transition duration-200 rounded-lg">
-                    <div class="col-span-3 sm:col-span-4">
-                        <h3 class="font-serif-elegant text-xl font-semibold text-gold product-name" 
-                            data-name="${item.name}"
-                            data-image="${item.image}"
-                            data-desc="${item.desc.replace(/\*\*(.*?)\*\*/g, '')}">
-                            ${item.name}
-                        </h3>
-                        <p class="text-gray-400 text-sm menu-item-description">${item.desc.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>
+                <div class="bg-dark-navy p-4 sm:p-6 rounded-xl shadow-xl border-t-4 ${isCombo ? 'border-emerald/70' : 'border-gold/50'} flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-serif-elegant text-xl sm:text-2xl font-semibold product-name text-gold hover:text-emerald transition duration-200"
+                                data-product-key="${key}" data-translate-name="${key}"
+                                onclick="openModal('${product.name.replace(/'/g, "\\'")}', '${product.desc.replace(/'/g, "\\'")}', '${product.image}', '${currentLang}')">
+                                ${product.name}
+                            </h3>
+                            <span class="text-2xl font-bold text-emerald whitespace-nowrap ml-4" data-translate-price="${key}">${product.price}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm italic" data-translate-desc="${key}">${product.desc}</p>
                     </div>
-                    <p class="col-span-1 text-right text-xl font-bold text-emerald">${item.price}</p>
+                    ${extraTags}
                 </div>
             `;
         }
 
-        // Función principal para actualizar el contenido del menú (CRÍTICO: Inyectar todo el HTML de una vez)
-        function updateMenuContent() {
-            const menuData = translations[currentLang].products;
+        /**
+         * Genera y renderiza el contenido del menú para el idioma actual.
+         * Este debe correr *después* de que se establece el idioma para asegurar que
+         * los títulos de sección se traduzcan correctamente en la función `translatePage`.
+         */
+        function generateMenuHTML() {
+            const langData = translations[currentLang];
             
-            // Título de Subsección del Menú
-            const getSectionTitle = (key) => `<h3 class="menu-section-title">${translations[currentLang][key]}</h3>`;
+            for (const [tabId, data] of Object.entries(menuDataStructure)) {
+                const container = document.getElementById(`content-${tabId}`);
+                if (!container) continue;
 
-            // 1. Brunch
-            let brunchHtml = getSectionTitle('brunch_section_title');
-            brunchHtml += renderMenuItem(menuData.brunch_1);
-            brunchHtml += renderMenuItem(menuData.brunch_2);
-            document.getElementById('content-brunch').innerHTML = brunchHtml;
+                let html = '';
 
-            // 2. Platos Fuertes
-            let mainsHtml = getSectionTitle('mains_section_title');
-            mainsHtml += renderMenuItem(menuData.mains_1);
-            mainsHtml += renderMenuItem(menuData.mains_2);
-            document.getElementById('content-fuertes').innerHTML = mainsHtml;
-            
-            // 3. Cocina Viajera
-            let interHtml = getSectionTitle('international_section_title');
-            interHtml += renderMenuItem(menuData.inter_1);
-            interHtml += renderMenuItem(menuData.inter_2);
-            interHtml += renderMenuItem(menuData.inter_3);
-            document.getElementById('content-internacional').innerHTML = interHtml;
-
-            // 4. Bebidas
-            let drinksHtml = getSectionTitle('drinks_section_title');
-            drinksHtml += `<p class="text-emerald font-semibold text-xl mt-4 mb-3 text-center">${translations[currentLang].subsection_hot}</p>`;
-            drinksHtml += renderMenuItem(menuData.hot_1);
-            drinksHtml += renderMenuItem(menuData.hot_2);
-            drinksHtml += renderMenuItem(menuData.hot_3);
-            drinksHtml += renderMenuItem(menuData.hot_4);
-            drinksHtml += `<p class="text-emerald font-semibold text-xl mt-6 mb-3 text-center">${translations[currentLang].subsection_cold}</p>`;
-            drinksHtml += renderMenuItem(menuData.cold_1);
-            drinksHtml += renderMenuItem(menuData.cold_2);
-            drinksHtml += renderMenuItem(menuData.cold_3);
-            document.getElementById('content-bebidas').innerHTML = drinksHtml;
-
-            // 5. Panadería y Postres
-            let dessertsHtml = getSectionTitle('desserts_section_title');
-            dessertsHtml += renderMenuItem(menuData.dessert_1);
-            dessertsHtml += renderMenuItem(menuData.dessert_2);
-            dessertsHtml += renderMenuItem(menuData.dessert_3);
-            document.getElementById('content-panrep').innerHTML = dessertsHtml;
-            
-            // 6. Combos
-            let combosHtml = getSectionTitle('combos_section_title');
-            
-            // Renderizado especial para combos (más destacados)
-            combosHtml += `
-                <div class="bg-dark-navy rounded-xl p-4 shadow-xl border-l-4 border-gold/70 hover:border-emerald transition duration-300 mb-4">
-                    <h3 class="font-serif-elegant text-2xl font-bold text-gold product-name" data-name="${menuData.combo_1.name}" data-image="${menuData.combo_1.image}" data-desc="${menuData.combo_1.desc}">
-                        ${menuData.combo_1.name} <i class="fas fa-heart text-red-500 ml-2"></i>
-                    </h3>
-                    <p class="text-gray-400 mt-1">${menuData.combo_1.desc}</p>
-                    <p class="text-3xl font-bold text-emerald mt-2">${menuData.combo_1.price}</p>
-                    <p class="text-sm text-gray-500 mt-1 italic">${translations[currentLang].combo_available}</p>
-                </div>
-            `;
-            
-            combosHtml += `
-                <div class="bg-dark-navy rounded-xl p-4 shadow-xl border-l-4 border-gold/70 hover:border-emerald transition duration-300">
-                    <h3 class="font-serif-elegant text-2xl font-bold text-gold product-name" data-name="${menuData.combo_2.name}" data-image="${menuData.combo_2.image}" data-desc="${menuData.combo_2.desc}">
-                        ${menuData.combo_2.name} <i class="fas fa-sun text-yellow-500 ml-2"></i>
-                    </h3>
-                    <p class="text-gray-400 mt-1">${menuData.combo_2.desc}</p>
-                    <p class="text-3xl font-bold text-emerald mt-2">${menuData.combo_2.price}</p>
-                    <p class="text-sm text-gray-500 mt-1 italic">${translations[currentLang].combo_validity}</p>
-                </div>
-            `;
-            document.getElementById('content-combos').innerHTML = combosHtml;
+                // Verifica si hay subsecciones (ej. Bebidas: Calientes y Frías)
+                if (data.subsections) {
+                    data.subsections.forEach(sub => {
+                        // Aplica la clase .menu-section-title para el estilo más pequeño y discreto
+                        html += `<div class="col-span-1 md:col-span-2"><h3 class="menu-section-title" data-translate="${sub.titleKey}">${langData[sub.titleKey]}</h3></div>`;
+                        sub.items.forEach(key => {
+                            html += createProductHTML(langData.products[key], key, false);
+                        });
+                    });
+                } else {
+                    // Si no hay subsecciones, crea un único título de sección principal
+                    // Aplica la clase .menu-section-title para el estilo más pequeño y discreto
+                    html += `<div class="col-span-1 md:col-span-2"><h3 class="menu-section-title" data-translate="${data.titleKey}">${langData[data.titleKey]}</h3></div>`;
+                    data.items.forEach(key => {
+                        const isCombo = tabId === 'combos';
+                        html += createProductHTML(langData.products[key], key, isCombo);
+                    });
+                }
+                container.innerHTML = html;
+            }
         }
 
-        // Función para traducir elementos estáticos (con data-translate)
-        function applyTranslations() {
-            document.querySelectorAll('[data-translate]').forEach(element => {
-                const key = element.getAttribute('data-translate');
-                if (translations[currentLang][key]) {
-                    element.innerHTML = translations[currentLang][key];
+        /**
+         * Traduce todos los elementos con el atributo data-translate al idioma dado.
+         * También llama a generateMenuHTML para regenerar el contenido del menú traducido.
+         * @param {string} lang - 'es' o 'en'.
+         */
+        function translatePage(lang) {
+            currentLang = lang;
+            const langData = translations[lang];
+
+            // 1. Traduce elementos estáticos
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (langData[key]) {
+                    el.innerHTML = langData[key];
                 }
             });
-            updateMenuContent(); // Asegura que el contenido dinámico también se actualice
-        }
 
-        // --- Lógica del Modal ---
-        const modal = document.getElementById('image-modal');
-        const modalImage = document.getElementById('modal-image');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDescription = document.getElementById('modal-description');
-        
-        function openModal(name, imageUrl, description) {
-            modalTitle.textContent = name;
-            modalImage.src = imageUrl;
-            // La descripción en el modal no debe tener formato Markdown, así que eliminamos negritas
-            modalDescription.textContent = description.replace(/\*\*(.*?)\*\*/g, '$1'); 
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden'; // Evitar scroll del fondo
-        }
+            // 2. Actualiza el botón de idioma
+            currentLangFlag.textContent = lang === 'es' ? 'EN' : 'ES';
 
-        function closeModal() {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            modalImage.src = "";
-            document.body.style.overflow = 'auto'; // Restaurar scroll del fondo
+            // 3. Regenera y traduce el contenido del menú dinámico
+            generateMenuHTML();
+
+            // 4. Traduce los títulos y descripciones del producto en el modal (si está abierto)
+            // Se asume que el modal está cerrado, pero si se implementa una apertura automática, se necesitaría más lógica.
         }
         
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') closeModal();
-        });
+        /**
+         * Muestra el contenido de la pestaña seleccionada y oculta las demás con transición.
+         * @param {string} tabId - ID de la pestaña a mostrar (e.g., 'brunch').
+         */
+        function switchTab(tabId) {
+            if (activeTab === tabId) return;
 
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabsContainer = document.getElementById('menu-tabs');
-            const contents = document.querySelectorAll('.tab-content');
-            const buttons = document.querySelectorAll('.tab-button');
-            const langToggle = document.getElementById('lang-toggle');
-            const currentLangFlag = document.getElementById('current-lang-flag');
-            const body = document.body;
-            const splashScreen = document.getElementById('splash-screen');
-
-
-            // 1. Lógica del Splash Screen (Intro Mágica)
-            setTimeout(() => {
-                // Opacidad a 0 para fade-out
-                splashScreen.style.opacity = '0'; 
-                // Después del fade-out, ocultar completamente y permitir scroll
-                setTimeout(() => {
-                    splashScreen.style.display = 'none';
-                    body.style.overflow = 'auto'; // Restaurar scroll
-                }, 500); // Duración de la transición CSS
-            }, 3000); // 3 segundos antes de empezar a desaparecer
+            const newContent = document.getElementById(`content-${tabId}`);
+            const oldContent = document.getElementById(`content-${activeTab}`);
             
-            // 2. Lógica de Pestañas (FIX: Corregido el flujo de display: none y opacity)
-            const activateTab = (tabName) => {
-                // Desactivar todos los contenidos
-                contents.forEach(content => {
-                    // 1. Iniciar la transición de opacidad a 0
-                    content.classList.remove('is-active'); 
-                    
-                    // 2. Después de la transición (400ms en CSS), ocultar completamente con display: none
-                    setTimeout(() => {
-                        content.classList.add('is-hidden');
-                    }, 400); 
-                });
-                buttons.forEach(button => button.classList.remove('active'));
+            // 1. Ocultar contenido antiguo con transición
+            if (oldContent && !oldContent.classList.contains('is-hidden')) {
+                oldContent.classList.remove('is-active');
+                setTimeout(() => {
+                    oldContent.classList.add('is-hidden');
+                }, 400); // 400ms = duración de la transición CSS
+            }
 
-                // Activar el contenido seleccionado
-                const activeContent = document.getElementById(`content-${tabName}`);
-                if (activeContent) {
-                    // 1. Mostrar el contenedor (quitar display: none)
-                    activeContent.classList.remove('is-hidden'); 
-                    
-                    // 2. Forzar un reflow para que el navegador reconozca el cambio de display
-                    void activeContent.offsetWidth; 
-                    
-                    // 3. Iniciar el fade-in (opacidad a 1)
-                    activeContent.classList.add('is-active'); 
-                }
+            // 2. Quitar clase 'active' del botón antiguo
+            document.querySelector(`.tab-button[data-tab="${activeTab}"]`)?.classList.remove('active');
 
-                const activeButton = document.querySelector(`button[data-tab="${tabName}"]`);
-                if (activeButton) activeButton.classList.add('active');
+            // 3. Mostrar nuevo contenido con transición
+            newContent.classList.remove('is-hidden');
+            setTimeout(() => {
+                newContent.classList.add('is-active');
+            }, 10); // Pequeño delay para forzar el reflow y que la transición inicie
+
+            // 4. Establecer nueva clase 'active' en el botón
+            document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('active');
+
+            activeTab = tabId;
+        }
+
+        // --- 3. FUNCIONES DE MODAL ---
+
+        /**
+         * Abre el modal con la información del producto.
+         */
+        function openModal(title, description, imageUrl, lang) {
+            const isSpanish = lang === 'es';
+            const modalTitleEl = document.getElementById('modal-title');
+            const modalImageEl = document.getElementById('modal-image');
+            const modalDescriptionEl = document.getElementById('modal-description');
+            
+            // Asigna los valores al modal
+            modalTitleEl.textContent = title;
+            modalDescriptionEl.innerHTML = description.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Mantener negritas
+            
+            // Placeholder con mensaje de imagen si la URL no es real
+            modalImageEl.src = imageUrl;
+            modalImageEl.onerror = () => {
+                // Si la imagen falla, usamos el placeholder dinámico
+                const placeholderText = isSpanish ? "Imagen no disponible" : "Image not available";
+                modalImageEl.src = `https://placehold.co/600x400/31435f/D4AF37?text=${placeholderText}`;
             };
             
-            tabsContainer.addEventListener('click', (event) => {
-                const button = event.target.closest('.tab-button');
-                if (button) {
-                    const tabName = button.getAttribute('data-tab');
-                    // Solo si la pestaña no está ya activa
-                    if (!button.classList.contains('active')) {
-                        activateTab(tabName);
-                    }
-                }
-            });
+            // Muestra el modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Evita scroll de fondo
+        }
+
+        /**
+         * Cierra el modal.
+         */
+        function closeModal() {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            document.body.style.overflow = ''; // Restaura scroll de fondo
+        }
+
+
+        // --- 4. EVENT LISTENERS Y SETUP ---
+
+        /**
+         * Efecto para la pantalla de bienvenida.
+         */
+        function splashScreenEffect() {
+            const splashScreen = document.getElementById('splash-screen');
             
-            // 3. Lógica del Selector de Idioma
-            langToggle.addEventListener('click', () => {
-                currentLang = currentLang === 'es' ? 'en' : 'es';
-                
-                // Actualizar la bandera en el botón para que muestre el idioma OPUESTO (al que puede cambiar)
-                langToggle.querySelector('#current-lang-flag').textContent = currentLang === 'es' ? 'EN' : 'ES'; 
+            // Inicializa la animación de fade-in
+            setTimeout(() => {
+                document.getElementById('splash-content').classList.add('splash-active');
+            }, 50); // Pequeño delay para asegurar la aplicación de la clase inicial
 
-                applyTranslations();
-                // Reactivar la pestaña actual para que las traducciones sean visibles inmediatamente
-                // Necesitamos el 'setTimeout' para que el contenido se inyecte antes de activar la animación de nuevo.
-                const currentActiveTab = document.querySelector('.tab-button.active')?.getAttribute('data-tab') || 'brunch';
-                setTimeout(() => activateTab(currentActiveTab), 50); 
+            // Desaparece la pantalla de splash después de la animación
+            setTimeout(() => {
+                splashScreen.style.opacity = '0';
+                setTimeout(() => {
+                    splashScreen.remove();
+                }, 500); // Remueve el elemento después de la transición de opacidad
+            }, 3000); // Muestra por 3.0 segundos (1.8s de animación + 1.2s de pausa)
+        }
+
+        function setupEventListeners() {
+            // Evento para cambiar el idioma
+            langToggleBtn.addEventListener('click', () => {
+                const newLang = currentLang === 'es' ? 'en' : 'es';
+                translatePage(newLang);
             });
 
-            // 4. Event listener para los NOMBRES de los productos (Abrir Modal)
-            document.getElementById('menu-content').addEventListener('click', function(event) {
-                const nameElement = event.target.closest('.product-name');
-                if (nameElement) {
-                    const name = nameElement.getAttribute('data-name');
-                    const imageUrl = nameElement.getAttribute('data-image');
-                    const description = nameElement.getAttribute('data-desc');
-                    
-                    if (imageUrl) {
-                        openModal(name, imageUrl, description);
-                    } else {
-                        console.error('No se encontró URL de imagen para este producto.');
+            // Eventos para cambiar de pestaña
+            document.getElementById('menu-tabs').querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    switchTab(e.currentTarget.dataset.tab);
+                });
+            });
+
+            // Eventos para scroll suave en enlaces de navegación
+            document.querySelectorAll('a.nav-link').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        // Calcula la posición y ajusta por el tamaño del header fijo
+                        const headerHeight = document.querySelector('.fixed-header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20; // 20px de padding extra
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
                     }
+                });
+            });
+
+            // Cerrar modal con la tecla ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
                 }
             });
+        }
 
-            // Inicialización:
-            applyTranslations(); 
-            // Inicializamos la pestaña 'brunch' para que aparezca por defecto
-            // Esperamos un poco para asegurarnos de que el DOM esté listo y las traducciones aplicadas
-            setTimeout(() => {
-                activateTab('brunch'); 
-                currentLangFlag.textContent = currentLang === 'es' ? 'EN' : 'ES'; // Muestra el idioma al que se puede cambiar
-            }, 100);
-        });
+        // --- INICIALIZACIÓN ---
+        window.onload = function() {
+            // Inicia el efecto de bienvenida
+            splashScreenEffect();
+
+            // Genera el contenido del menú y traduce la página al idioma inicial (es)
+            translatePage(currentLang);
+
+            // Activa la pestaña de BRUNCH por defecto y el botón
+            document.querySelector('.tab-button[data-tab="brunch"]').classList.add('active');
+            document.getElementById('content-brunch').classList.remove('is-hidden');
+            document.getElementById('content-brunch').classList.add('is-active');
+
+            // Configura todos los manejadores de eventos
+            setupEventListeners();
+        };
+
     </script>
 </body>
 </html>
