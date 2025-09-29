@@ -286,19 +286,19 @@
                 <div class="flex-shrink-0 w-[85%] sm:w-full p-4 border border-gold/30 rounded-lg bg-section shadow-lg scroll-snap-align-center">
                     <div class="text-4xl text-emerald mb-3">☕</div>
                     <h4 class="font-serif-elegant text-xl font-semibold text-gold mb-2" data-translate="ritual_morning_title">Amanecer (Brunch)</h4>
-                    <p class="text-gray-400" data-translate="ritual_morning_time">Despierta con nuestra energía ancestral. <br>De **8:00 AM a 11:30 AM**.</p>
+                    <p class="text-gray-400" data-translate="ritual_morning_time">Despierta con nuestra energía ancestral. <br>De 8:00 AM a 11:30 AM.</p>
                 </div>
                 <!-- Ritual 2: Tarde -->
                 <div class="flex-shrink-0 w-[85%] sm:w-full p-4 border border-gold/30 rounded-lg bg-section shadow-lg scroll-snap-align-center ml-4 md:ml-0">
                     <div class="text-4xl text-emerald mb-3">🍽️</div>
                     <h4 class="font-serif-elegant text-xl font-semibold text-gold mb-2" data-translate="ritual_noon_title">El Almuerzo (Fuertes)</h4>
-                    <p class="text-gray-400" data-translate="ritual_noon_time">Platos de autor, frescos y nutritivos. <br>De **12:00 PM a 3:00 PM**.</p>
+                    <p class="text-gray-400" data-translate="ritual_noon_time">Platos de autor, frescos y nutritivos. <br>De 12:00 PM a 3:00 PM.</p>
                 </div>
                 <!-- Ritual 3: Noche -->
                 <div class="flex-shrink-0 w-[85%] sm:w-full p-4 border border-gold/30 rounded-lg bg-section shadow-lg scroll-snap-align-center ml-4 md:ml-0">
                     <div class="text-4xl text-emerald mb-3">🍰</div>
                     <h4 class="font-serif-elegant text-xl font-semibold text-gold mb-2" data-translate="ritual_evening_title">Reencuentro (Postres & Café)</h4>
-                    <p class="text-gray-400" data-translate="ritual_evening_time">El momento para el amor y el buen café. <br>De **3:00 PM a 8:00 PM**.</p>
+                    <p class="text-gray-400" data-translate="ritual_evening_time">El momento para el amor y el buen café. <br>De 3:00 PM a 8:00 PM.</p>
                 </div>
             </div>
             <p class="text-xs text-gray-500 mt-4 md:hidden">
@@ -368,7 +368,7 @@
         const menuDataStructure = {
             brunch: {
                 titleKey: "brunch_section_title",
-                items: ["brunch_1", "brunch_2"]
+                items: ["brunch_1", "brunch_2", "brunch_3", "brunch_4"]
             },
             fuertes: {
                 titleKey: "mains_section_title",
@@ -419,11 +419,11 @@
                 // RITUALES
                 rituals_main_title: "Rituales de Le Port: Tu Conveniencia",
                 ritual_morning_title: "Amanecer (Brunch)",
-                ritual_morning_time: "Despierta con nuestra energía ancestral. <br>De **8:00 AM a 11:30 AM**.",
+                ritual_morning_time: "Despierta con nuestra energía ancestral. <br>De 8:00 AM a 11:30 AM.",
                 ritual_noon_title: "Fuertes",
-                ritual_noon_time: "Platos de autor, frescos y nutritivos. <br>De **12:00 PM a 3:00 PM**.",
+                ritual_noon_time: "Platos de autor, frescos y nutritivos. <br>De 12:00 PM a 3:00 PM.",
                 ritual_evening_title: "Reencuentro (Postres & Café)",
-                ritual_evening_time: "El momento para el amor y el buen café. <br>De **3:00 PM a 8:00 PM**.",
+                ritual_evening_time: "El momento para el amor y el buen café. <br>De 3:00 PM a 8:00 PM.",
                 slide_tip: "Desliza para ver todos los rituales.",
                 slide_tip_menu: "Desliza para navegar las secciones.", // Nuevo texto de ayuda
                 // MENÚ SECCIONES
@@ -443,8 +443,10 @@
                 // PRODUCTOS
                 products: {
                     // BRUNCH
-                    brunch_1: { name: "Huevos Rancheros del Tayrona", desc: "Huevos orgánicos sobre tostada artesanal con suero costeño y aguacate.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Huevos+Rancheros", price: "$18.900" },
-                    brunch_2: { name: "Tostadas Ancestrales", desc: "Tostada de pan de masa madre con queso crema, miel de abejas y frutos secos.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Tostadas+con+Miel", price: "$15.500" },
+                    brunch_1: { name: "Sartén a la Criolla", desc: "Huevos al sartén con frijoles cocidos, chorizo criollo, tomate, cebolla morada, cilantro fresco y hojas de espinaca. Acompañado de pan artesanal y aguacate.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Huevos+Rancheros", price: "$18.900" },
+                    brunch_2: { name: "Pancake Beso de Amor", desc: "Esponjoso pancake de coco fresco, almendras molidas, miel y vainilla, acompañado de frutos rojos (arándanos, frambuesas y moras) y un suave velo de azúcar ultrafina.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Tostadas+con+Miel", price: "$15.500" },
+                    brunch_3: { name: "Amanecer Toscana", desc: "Huevos al sartén con tomate fresco y pomodoro italiano, aceitunas verdes y negras, cebolla caramelizada suave, bolitas de mozzarella de búfala y hierbas aromáticas. Acompañado con pan campesino artesanal.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Tostadas+con+Miel", price: "$15.500" },
+                    brunch_4: { name: "Ensalada Romance al Atardecer", desc: "Hojas de remolacha y acelga baby con jamón serrano, burrata fresca, tomates cherry, duraznos grillados y almendras tostadas, aliñados con vinagreta de limón, miel y reducción de balsámico.", price: "$28.000" },
                     // PLATOS FUERTES
                     mains_1: { name: "Pescado Caribeño al Vapor", desc: "Pescado blanco fresco cocido en leche de coco y verduras, servido con arroz.", image: "https://placehold.co/600x400/006A4E/FFFFFF?text=Pescado+Al+Vapor", price: "$24.500" },
                     mains_2: { name: "Bowl del Refugio", desc: "Base de quinoa, pollo o lentejas, vegetales frescos y aderezo de maracuyá.", image: "https://placehold.co/600x400/6B8E23/FFFFFF?text=Bowl+de+Quinoa", price: "$21.900" },
@@ -462,7 +464,7 @@
                     cold_2: { name: "Agua del Origen", desc: "Limonada de coco, o refresco de corozo/tamarindo. Fruta de temporada.", image: "https://placehold.co/600x400/90EE90/101C2B?text=Limonada+Tropical", price: "$6.900" },
                     cold_3: { name: "Batido de la Sierra", desc: "Batido cremoso de frutas tropicales y yogurt natural.", image: "https://placehold.co/600x400/FFD700/101C2B?text=Batido+de+Frutas", price: "$10.500" },
                     // POSTRES
-                    dessert_1: { name: "Tarta 'Amores de Arhuaco'", desc: "Tarta cremosa con base de maíz/yuca y maracuyá.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Tarta+Maracuya", price: "$12.900" },
+                    dessert_1: { name: "Tiramisú 'Amores de Arhuaco'", desc: "Capas cremosas con mermelada casera de arándanos. Un clásico italiano con un giro frutal y fresco.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Tarta+Maracuya", price: "$15.900" },
                     dessert_2: { name: "Panela Roll", desc: "Cinnamon roll con jarabe de panela artesanal.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Panela+Roll", price: "$7.500" },
                     dessert_3: { name: "Pan de Yuca Rústico", desc: "Receta tradicional, ideal para acompañar el tinto.", image: "https://placehold.co/600x400/FFFAF0/101C2B?text=Pan+de+Yuca", price: "$3.500" },
                     // COMBOS
@@ -493,11 +495,11 @@
                 // RITUALES
                 rituals_main_title: "Le Port Rituals: Your Convenience",
                 ritual_morning_title: "Sunrise (Brunch)",
-                ritual_morning_time: "Awaken with our ancestral energy. <br>From **8:00 AM to 11:30 AM**.",
+                ritual_morning_time: "Awaken with our ancestral energy. <br>From 8:00 AM to 11:30 AM.",
                 ritual_noon_title: "The Lunch (Mains)",
-                ritual_noon_time: "Signature dishes, fresh and nutritious. <br>From **12:00 PM to 3:00 PM**.",
+                ritual_noon_time: "Signature dishes, fresh and nutritious. <br>From 12:00 PM to 3:00 PM.",
                 ritual_evening_title: "Reunion (Desserts & Coffee)",
-                ritual_evening_time: "The moment for love and good coffee. <br>From **3:00 PM to 8:00 PM**.",
+                ritual_evening_time: "The moment for love and good coffee. <br>From 3:00 PM to 8:00 PM.",
                 slide_tip: "Swipe to see all rituals.",
                 slide_tip_menu: "Swipe to navigate sections.", // Nuevo texto de ayuda
                 // MENÚ SECCIONES
@@ -517,8 +519,10 @@
                 // PRODUCTOS
                 products: {
                     // BRUNCH
-                    brunch_1: { name: "Tayrona Ranch Eggs", desc: "Organic eggs on artisan toast with coastal sour cream and avocado.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Ranch+Eggs", price: "$18.900" },
-                    brunch_2: { name: "Ancestral Toast", desc: "Sourdough bread toast with cream cheese, honey and nuts.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Toast+with+Honey", price: "$15.500" },
+                    brunch_1: { name: "Creole Skillet", desc: "Skillet eggs with stewed beans, criollo sausage, tomato, red onion, fresh cilantro, and spinach leaves. Served with artisanal bread and avocado.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Ranch+Eggs", price: "$18.900" },
+                    brunch_2: { name: "Pancake Kiss of Love", desc: "Fluffy pancake made with fresh coconut, ground almonds, honey, and vanilla, topped with fresh berries (blueberries, raspberries, and blackberries) and a delicate veil of fine sugar", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Toast+with+Honey", price: "$15.500" },
+                    brunch_3: { name: "Sunrise in Tuscany", desc: "Skillet eggs with fresh tomato, Italian pomodoro, green & black olives, soft caramelized onion, buffalo mozzarella bites, and aromatic herbs. Served with rustic country bread.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Toast+with+Honey", price: "$18.000" },
+                    brunch_4: { name: "Sunset Romance Salad", desc: "Baby beet and Swiss chard leaves with serrano ham, fresh burrata, cherry tomatoes, grilled peaches, and toasted almonds, dressed with a vinaigrette of lemon, honey, and balsamic reduction.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Toast+with+Honey", price: "$28.000" },
                     // MAIN DISHES
                     mains_1: { name: "Caribbean Steamed Fish", desc: "Fresh white fish cooked in coconut milk and vegetables, served with rice.", image: "https://placehold.co/600x400/006A4E/FFFFFF?text=Steamed+Fish", price: "$24.500" },
                     mains_2: { name: "The Refuge Bowl", desc: "Quinoa base, chicken or lentils, fresh vegetables, and passion fruit dressing.", image: "https://placehold.co/600x400/6B8E23/FFFFFF?text=Quinoa+Bowl", price: "$21.900" },
@@ -536,7 +540,7 @@
                     cold_2: { name: "Water of Origin", desc: "Coconut lemonade, or corozo/tamarind refreshment. Seasonal fruit.", image: "https://placehold.co/600x400/90EE90/101C2B?text=Tropical+Lemonade", price: "$6.900" },
                     cold_3: { name: "Sierra Smoothie", desc: "Creamy smoothie with tropical fruits and natural yogurt.", image: "https://placehold.co/600x400/FFD700/101C2B?text=Fruit+Smoothie", price: "$10.500" },
                     // POSTRES
-                    dessert_1: { name: "Arhuaco Loves' Tart", desc: "Creamy tart with a corn/yucca base and passion fruit.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Passion+Fruit+Tart", price: "$12.900" },
+                    dessert_1: { name: "Tiramisu Loves of the Arhuaco", desc: "Creamy layers with homemade blueberry jam. A classic Italian dessert with a fresh, fruity twist.", image: "https://placehold.co/600x400/D4AF37/101C2B?text=Passion+Fruit+Tart", price: "$12.900" },
                     dessert_2: { name: "Panela Roll", desc: "Cinnamon roll with artisan panela syrup.", image: "https://placehold.co/600x400/8B4513/FFFFFF?text=Panela+Roll", price: "$7.500" },
                     dessert_3: { name: "Rustic Yucca Bread", desc: "Traditional recipe, ideal to accompany the classic black coffee.", image: "https://placehold.co/600x400/FFFAF0/101C2B?text=Yucca+Bread", price: "$3.500" },
                     // COMBOS
